@@ -1,41 +1,33 @@
-// Initialize web3 and set provider
-let web3;
+// Utility functions and helpers
 
-window.addEventListener('load', async () => {
-  console.log("Window Loaded");
+/**
+ * Initialize web3 instance and request account access
+ * @returns {Promise<Web3 | null>} A web3 instance or null
+ */
+async function initWeb3() {
+  let web3Instance = null;
 
   if (window.ethereum) {
-    console.log("Ethereum object exists in window");
-    web3 = new Web3(window.ethereum);
+    web3Instance = new Web3(window.ethereum);
     try {
-      console.log("Requesting account access");
       await window.ethereum.request({ method: 'eth_requestAccounts' });
-      console.log("Account access granted");
-      document.getElementById("issueButton").disabled = false;
     } catch (error) {
       console.error("User denied account access");
+      return null;
     }
-  } 
-  // Legacy dapp browsers...
-  else if (window.web3) {
-    console.log("Legacy web3 object exists in window");
-    web3 = new Web3(window.web3.currentProvider);
-    document.getElementById("issueButton").disabled = false;
-  } 
-  // Non-dapp browsers...
-  else {
+  } else if (window.web3) {
+    web3Instance = new Web3(window.web3.currentProvider);
+  } else {
     console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
   }
 
-  // If web3 instance is created successfully then proceed to enable the button and attach click event.
-  if (web3) {
-    console.log("Web3 exists, attaching click event");
-    document.getElementById("issueButton").addEventListener('click', issueTokens);
-  }
-});
+  return web3Instance;
+}
 
-console.log("Contract methods: ", contract.methods);
-
+/**
+ * Issue tokens to multiple users.
+ * @param {Web3} web3Instance - The web3 instance
+ */
 async function issueTokens() {
     const contractAddress = "0xc44A244579066aeBb1B5FAfF5DFfCf02E4a0819A";
     const abi = [
@@ -467,10 +459,10 @@ async function issueTokens() {
   const tokenIds = document.getElementById("tokenIds").value.split('\n').map(Number);
   const amounts = document.getElementById("amounts").value.split('\n').map(Number);
 
-  const contract = new web3.eth.Contract(abi, contractAddress);
+  const contract = new web3Instance.eth.Contract(abi, contractAddress);
 
   try {
-    const accounts = await web3.eth.getAccounts();
+    const accounts = await web3Instance.eth.getAccounts();
     const fromAddress = accounts[0];
 
     const tx = await contract.methods.issueTokensToMultipleUsers(walletAddresses, tokenIds, amounts).send({ from: fromAddress });
@@ -482,3 +474,14 @@ async function issueTokens() {
     alert("An error occurred. See console for details.");
   }
 }
+
+// Main execution starts here
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const web3 = await initWeb3();
+  
+  if (web3) {
+    document.getElementById("issueButton").disabled = false;
+    document.getElementById("issueButton").addEventListener('click', () => issueTokens(web3));
+  }
+});
