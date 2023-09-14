@@ -15,10 +15,9 @@ async function initWeb3() {
       console.error("User denied account access");
       return null;
     }
-  } else if (window.web3) {
-    web3Instance = new Web3(window.web3.currentProvider);
   } else {
     console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+    return null;
   }
 
   return web3Instance;
@@ -28,7 +27,7 @@ async function initWeb3() {
  * Issue tokens to multiple users.
  * @param {Web3} web3Instance - The web3 instance
  */
-async function issueTokens() {
+async function issueTokens(web3Instance) {
     const contractAddress = "0xc44A244579066aeBb1B5FAfF5DFfCf02E4a0819A";
     const abi = [
 	{
@@ -455,6 +454,12 @@ async function issueTokens() {
 	}
 ];
 
+    if (!abi || abi.length === 0) {
+        console.error("ABI is not defined.");
+        alert("ABI is missing. Check the console for more details.");
+        return;
+    }
+
   const walletAddresses = document.getElementById("walletAddresses").value.split('\n');
   const tokenIds = document.getElementById("tokenIds").value.split('\n').map(Number);
   const amounts = document.getElementById("amounts").value.split('\n').map(Number);
@@ -466,7 +471,7 @@ async function issueTokens() {
     const fromAddress = accounts[0];
 
     const tx = await contract.methods.issueTokensToMultipleUsers(walletAddresses, tokenIds, amounts).send({ from: fromAddress });
-    
+
     console.log("Tokens Issued Successfully:", tx);
     alert("Tokens Issued Successfully!");
   } catch (error) {
@@ -477,11 +482,32 @@ async function issueTokens() {
 
 // Main execution starts here
 
+document.getElementById("connectButton").addEventListener('click', connectWallet);
+
+async function connectWallet() {
+  console.log("connectWallet function called"); // Debugging line
+  const web3Instance = await initWeb3();
+  if (web3Instance) {
+    const accounts = await web3Instance.eth.getAccounts();
+    if (accounts.length > 0) {
+      document.getElementById("walletStatus").innerText = `Wallet connected: ${accounts[0]}`;
+      document.getElementById("issueButton").disabled = false;
+    }
+  } else {
+    document.getElementById("walletStatus").innerText = 'No wallet connected';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+  console.log("DOMContentLoaded event fired"); // Debugging line
   const web3 = await initWeb3();
   
   if (web3) {
+    console.log("Web3 initialized"); // Debugging line
     document.getElementById("issueButton").disabled = false;
-    document.getElementById("issueButton").addEventListener('click', () => issueTokens(web3));
+    document.getElementById("issueButton").addEventListener('click', () => {
+      console.log("Issue button clicked"); // Debugging line
+      issueTokens(web3)
+    });
   }
 });
