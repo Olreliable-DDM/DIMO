@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ecosystem Token Issuance</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.0/dist/web3.min.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.0/dist/web3.min.js"></script>
     <style>
         :root {
             --primary-color: cyan;
@@ -92,18 +92,42 @@
             background-color: white;
             color: var(--primary-color);
         }
+
+        #connectButton {
+            background-color: var(--primary-color);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        #connectButton:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        #walletStatus {
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <main class="container" aria-label="Token Issuance Form">
+    <div class="container">
         <h1>Ecosystem Token Issuance</h1>
-        <form id="issuanceForm">
-            <textarea id="walletAddresses" placeholder="Wallet Addresses (One per line)" aria-label="Wallet Addresses"></textarea>
-            <textarea id="tokenIds" placeholder="Token IDs (One per line)" aria-label="Token IDs"></textarea>
-            <textarea id="amounts" placeholder="Amounts (One per line)" aria-label="Amounts"></textarea>
-            <button type="button" id="issueButton" disabled aria-disabled="true">Issue Tokens</button>
-        </form>
-    </main>
-    <script src="main.js" async></script>
+        <div>
+            <textarea id="walletAddresses" placeholder="Wallet Addresses (One per line)"></textarea>
+            <textarea id="tokenIds" placeholder="Token IDs (One per line)"></textarea>
+            <textarea id="amounts" placeholder="Amounts (One per line)"></textarea>
+        </div>
+        <button id="issueButton" disabled>Issue Tokens</button>
+        <button type="button" id="connectButton">Connect Wallet</button>
+        <p id="walletStatus">No wallet connected</p>
+     </div>
+    <script src="main.js"></script>
 </body>
 </html>
