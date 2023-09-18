@@ -28,7 +28,7 @@ async function initWeb3() {
  * @param {Web3} web3Instance - The web3 instance
  */
 async function issueTokens(web3Instance) {
-    const contractAddress = "0xc44A244579066aeBb1B5FAfF5DFfCf02E4a0819A";
+    const contractAddress = "0x883364c32680a06e93019C0f82ceA5164B31bd2c";
     const abi = [
 	{
 		"anonymous": false,
