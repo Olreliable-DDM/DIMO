@@ -28,8 +28,39 @@ async function initWeb3() {
  * @param {Web3} web3Instance - The web3 instance
  */
 async function issueTokens(web3Instance) {
-    const contractAddress = "0x883364c32680a06e93019C0f82ceA5164B31bd2c";
+    const contractAddress = "0x2270884CDbD0fe6f107CcfD0f3ADeB04E66fb2b3";
     const abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "grantRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
+			}
+		],
+		"name": "initialize",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
 	{
 		"anonymous": false,
 		"inputs": [
@@ -44,6 +75,29 @@ async function issueTokens(web3Instance) {
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "users",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "tokenIds",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"name": "issueTokensToMultipleUsers",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -55,6 +109,42 @@ async function issueTokens(web3Instance) {
 		],
 		"name": "PartnerNFTSet",
 		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "renounceRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "revokeRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -132,6 +222,19 @@ async function issueTokens(web3Instance) {
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "nftAddress",
+				"type": "address"
+			}
+		],
+		"name": "setPartnerNFT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -158,6 +261,32 @@ async function issueTokens(web3Instance) {
 	},
 	{
 		"inputs": [],
+		"name": "ADMIN_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "availableTokens",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "COOLDOWN_PERIOD",
 		"outputs": [
 			{
@@ -177,32 +306,6 @@ async function issueTokens(web3Instance) {
 				"internalType": "bytes32",
 				"name": "",
 				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "OWNER_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "availableTokens",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -240,24 +343,6 @@ async function issueTokens(web3Instance) {
 				"type": "address"
 			}
 		],
-		"name": "grantRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
 		"name": "hasRole",
 		"outputs": [
 			{
@@ -267,24 +352,6 @@ async function issueTokens(web3Instance) {
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "tokenAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_masterWallet",
-				"type": "address"
-			}
-		],
-		"name": "initialize",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -314,29 +381,6 @@ async function issueTokens(web3Instance) {
 	{
 		"inputs": [
 			{
-				"internalType": "address[]",
-				"name": "users",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "tokenIds",
-				"type": "uint256[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "amounts",
-				"type": "uint256[]"
-			}
-		],
-		"name": "issueTokensToMultipleUsers",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
@@ -360,12 +404,12 @@ async function issueTokens(web3Instance) {
 	},
 	{
 		"inputs": [],
-		"name": "masterWallet",
+		"name": "OWNER_ROLE",
 		"outputs": [
 			{
-				"internalType": "address",
+				"internalType": "bytes32",
 				"name": "",
-				"type": "address"
+				"type": "bytes32"
 			}
 		],
 		"stateMutability": "view",
@@ -382,55 +426,6 @@ async function issueTokens(web3Instance) {
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "renounceRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "revokeRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "nftAddress",
-				"type": "address"
-			}
-		],
-		"name": "setPartnerNFT",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -462,7 +457,10 @@ async function issueTokens(web3Instance) {
 
   const walletAddresses = document.getElementById("walletAddresses").value.split('\n');
   const tokenIds = document.getElementById("tokenIds").value.split('\n').map(Number);
-  const amounts = document.getElementById("amounts").value.split('\n').map(Number);
+  const amounts = document.getElementById("amounts").value
+    .split('\n')
+    .map(amount => web3Instance.utils.toWei(amount.toString(), 'ether')); // Convert to smallest unit
+
 
   const contract = new web3Instance.eth.Contract(abi, contractAddress);
 
