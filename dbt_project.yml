@@ -1,0 +1,30 @@
+# dbt_project.yml
+name: 'shopify_holistic'        # your project’s new name
+version: '1.0.0'
+config-version: 2
+
+# Match the profile you created in dbt Cloud (usually "default")
+profile: 'default'
+
+# Tell dbt exactly where your code lives:
+model-paths:       ["DIMO/models"]
+analysis-paths:    ["DIMO/analyses"]
+test-paths:        ["tests"]
+seed-paths:        ["DIMO/seeds"]
+macro-paths:       ["DIMO/macros"]
+snapshot-paths:    ["DIMO/snapshots"]
+
+# Where dbt will build compiled SQL
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Package variables for the Fivetran Shopify & Holistic packages
+vars:
+  shopify_source:
+    shopify_schema:   "shopify"                  # your raw Shopify dataset name
+    shopify_database: "drive-dimo-analytics"     # your BigQuery project
+  shopify_holistic_reporting:
+    target_schema:    "analytics"                # where the Holistic tables should land
+    target_database:  "drive-dimo-analytics"
