@@ -1,42 +1,30 @@
-
-# Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
-# name or the intended use of these models
-name: 'my_new_project'
+# dbt_project.yml
+name: 'shopify_holistic'        # your project’s new name
 version: '1.0.0'
 config-version: 2
 
-# This setting configures which "profile" dbt uses for this project.
+# Match the profile you created in dbt Cloud (usually "default")
 profile: 'default'
 
-# These configurations specify where dbt should look for different types of files.
-# The `model-paths` config, for example, states that models in this project can be
-# found in the "models/" directory. You probably won't need to change these!
-model-paths: ["models"]
-analysis-paths: ["analyses"]
-test-paths: ["tests"]
-seed-paths: ["seeds"]
-macro-paths: ["macros"]
-snapshot-paths: ["snapshots"]
+# Tell dbt exactly where your code lives:
+model-paths:       ["DIMO/models"]
+analysis-paths:    ["DIMO/analyses"]
+test-paths:        ["tests"]
+seed-paths:        ["DIMO/seeds"]
+macro-paths:       ["DIMO/macros"]
+snapshot-paths:    ["DIMO/snapshots"]
 
-target-path: "target"  # directory which will store compiled SQL files
-clean-targets:         # directories to be removed by `dbt clean`
+# Where dbt will build compiled SQL
+target-path: "target"
+clean-targets:
   - "target"
   - "dbt_packages"
 
-
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
-
-# In dbt, the default materialization for a model is a view. This means, when you run 
-# dbt run or dbt build, all of your models will be built as a view in your data platform. 
-# The configuration below will override this setting for models in the example folder to 
-# instead be materialized as tables. Any models you add to the root of the models folder will 
-# continue to be built as views. These settings can be overridden in the individual model files
-# using the `{{ config(...) }}` macro.
-
-models:
-  my_new_project:
-    # Applies to all files under models/example/
-    example:
-      +materialized: table
+# Package variables for the Fivetran Shopify & Holistic packages
+vars:
+  shopify_source:
+    shopify_schema:   "shopify"                  # your raw Shopify dataset name
+    shopify_database: "drive-dimo-analytics"     # your BigQuery project
+  shopify_holistic_reporting:
+    target_schema:    "analytics"                # where the Holistic tables should land
+    target_database:  "drive-dimo-analytics"
