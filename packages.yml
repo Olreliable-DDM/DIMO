@@ -1,22 +1,9 @@
-# packages.yml
-
 packages:
-  # Replacement for the deprecated calogica/dbt_date
   - package: godatadriven/dbt_date
     version: [">=0.6.0", "<0.7.0"]
-
-  # Must be 1.x to satisfy shopify_holistic_reporting
-  - package: dbt-labs/dbt_utils
-    version: [">=1.0.0", "<2.0.0"]   # :contentReference[oaicite:0]{index=0}
-
-  # Required by the Holistic package for Databricks dispatch
-  - package: dbt-labs/spark_utils
-    version: [">=0.3.0", "<0.4.0"]   # :contentReference[oaicite:1]{index=1}
-
-  # Fivetran’s shared macros
-  - package: fivetran/fivetran_utils
-    version: [">=0.4.0", "<0.5.0"]   # :contentReference[oaicite:2]{index=2}
-
-  # The combo package pulls in shopify, shopify_source, klaviyo* & fivetran_utils
+  - package: fivetran/shopify_source
+    version: [">=0.12.0", "<0.13.0"]
   - package: fivetran/shopify_holistic_reporting
-    version: [">=0.8.0", "<0.9.0"]   # :contentReference[oaicite:3]{index=3}
+    version: [">=0.8.0", "<0.9.0"]
+  - package: fivetran/fivetran_utils
+    version: [">=0.4.10", "<0.5.0"]
